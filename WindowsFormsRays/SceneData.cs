@@ -24,6 +24,10 @@ namespace WindowsFormsRays
             objects.Add(new Letter3D("PIXAR") { Material = new MirrorMaterial() });
             objects.Add(new Room3D() { Material = new WallMaterial() });
             objects.Add(new Sun3D() { Material = lightMaterial });
+            /*objects.Add(new Obj3D("Source/african_head/african_head.obj")
+            {
+                Material = new WallMaterial()
+            });*/
         }
 
         // Sample the world using Signed Distance Fields.

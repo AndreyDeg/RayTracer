@@ -14,8 +14,10 @@ namespace WindowsFormsRays
         public static Vector operator +(Vector k, Vector r) { return new Vector(k.x + r.x, k.y + r.y, k.z + r.z); }
         public static Vector operator -(Vector k, Vector r) { return new Vector(k.x - r.x, k.y - r.y, k.z - r.z); }
         public static Vector operator +(Vector k, float r) { return new Vector(k.x + r, k.y + r, k.z + r); }
+        public static Vector operator -(Vector k, float r) { return new Vector(k.x - r, k.y - r, k.z - r); }
         public static Vector operator *(Vector k, Vector r) { return new Vector(k.x * r.x, k.y * r.y, k.z * r.z); }
         public static Vector operator *(Vector k, float r) { return new Vector(k.x * r, k.y * r, k.z * r); }
+        public static Vector operator /(Vector k, float r) { return new Vector(k.x / r, k.y / r, k.z / r); }
         // dot product
         public static float operator %(Vector k, Vector r) { return k.x * r.x + k.y * r.y + k.z * r.z; }
         // inverse square root
