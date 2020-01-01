@@ -21,19 +21,23 @@ namespace WindowsFormsRays
                 Material = lightMaterial,
                 randomCoef = 0.2f
             });
-            objects.Add(new Text3D("PIXAR") { Material = new MirrorMaterial() });
+            Text3D text;
+            objects.Add(text = new Text3D("PIXAR") { Material = new MirrorMaterial() });
             objects.Add(new Room3D() { Material = new WallMaterial() });
             objects.Add(new Sun3D() { Material = lightMaterial });
+
+            foreach(var t in text.objects)
+            objects.Add(new Box3D { Min = t.boxMin + new Vector(t.posX, 0, 0), Max = t.boxMax + new Vector(t.posX, 0, 0) });
         }
 
         // Sample the world using Signed Distance Fields.
-        public float QueryDatabase(Vector position, out IMaterial hitType)
+        public float QueryDatabase(Vector position, Vector direction, out IMaterial hitType)
         {
             hitType = null;
             float distance = 1e9f;
             foreach (var obj in objects)
             {
-                var dist = obj.GetDistance(position);
+                var dist = obj.GetDistance(position, direction);
                 if (distance > dist)
                 {
                     distance = dist;
@@ -46,15 +50,15 @@ namespace WindowsFormsRays
 
         public Vector QueryDatabaseNorm(Vector hitPos)
         {
-            float d = QueryDatabase(hitPos, out var _);
+            float d = QueryDatabase(hitPos, new Vector(0,0,0), out var _);
             return QueryDatabaseNorm(hitPos, d);
         }
 
         public Vector QueryDatabaseNorm(Vector hitPos, float d)
         {
-            return new Vector(QueryDatabase(hitPos + new Vector(.01f, 0), out _) - d,
-                QueryDatabase(hitPos + new Vector(0, .01f), out _) - d,
-                QueryDatabase(hitPos + new Vector(0, 0, .01f), out _) - d).Normal();
+            return new Vector(QueryDatabase(hitPos + new Vector(.01f, 0), new Vector(0, 0, 0), out _) - d,
+                QueryDatabase(hitPos + new Vector(0, .01f), new Vector(0, 0, 0), out _) - d,
+                QueryDatabase(hitPos + new Vector(0, 0, .01f), new Vector(0, 0, 0), out _) - d).Normal();
         }
     }
 }

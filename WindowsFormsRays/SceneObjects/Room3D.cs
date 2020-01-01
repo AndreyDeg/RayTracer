@@ -7,10 +7,10 @@ namespace WindowsFormsRays.SceneObjects
     {
         public IMaterial Material { get; set; }
 
-        public float GetDistance(Vector position)
+        public float GetDistance(Vector position, Vector direction)
         {
             return Utils3D.min(// min(A,B) = Union with Constructive solid geometry
-                                 //-min carves an empty space
+                               //-min carves an empty space
                           -Utils3D.min(// Lower room
                                Utils3D.BoxTest(position, new Vector(-30, -.5f, -30), new Vector(30, 18, 30)),
                                // Upper room

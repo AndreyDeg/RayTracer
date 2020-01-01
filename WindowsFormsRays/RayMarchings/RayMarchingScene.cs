@@ -18,12 +18,12 @@ namespace WindowsFormsRays.RayMarchings
         {
             Vector hitPos = origin;
             int noHitCount = 0;
-            float d = sceneData.QueryDatabase(hitPos, out _); // distance from closest object in world.
+            float d = sceneData.QueryDatabase(hitPos, direction, out _); // distance from closest object in world.
             // Signed distance marching
             for (float total_d = d; total_d < 100; total_d += d)
             {
                 hitPos = origin + direction * total_d;
-                d = sceneData.QueryDatabase(hitPos, out var hitType);
+                d = sceneData.QueryDatabase(hitPos, direction, out var hitType);
                 if (d < accuracy || ++noHitCount > 99 || d < 0)
                     return hitType; // Weird return statement where a variable is also updated.
             }
@@ -38,14 +38,17 @@ namespace WindowsFormsRays.RayMarchings
             hitPos = origin;
             hitNorm = direction;
             int noHitCount = 0;
-            float d = sceneData.QueryDatabase(hitPos, out _); // distance from closest object in world.
+            float d = sceneData.QueryDatabase(hitPos, direction, out _); // distance from closest object in world.
             // Signed distance marching
             for (float total_d = d; total_d < 100; total_d += d)
             {
                 hitPos = origin + direction * total_d;
-                d = sceneData.QueryDatabase(hitPos, out var hitType);
+                d = sceneData.QueryDatabase(hitPos, direction, out var hitType);
                 if (d < accuracy || ++noHitCount > 99 || d < 0)
                 {
+                    if (accuracy < 0.03f && d < 0)
+                        return new ColorMaterial() { Color = new Vector(0, 0, 0) };
+
                     if (noHitCount < 99)
                         hitNorm = sceneData.QueryDatabaseNorm(hitPos, d);
 

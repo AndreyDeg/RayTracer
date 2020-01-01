@@ -5,6 +5,6 @@ namespace WindowsFormsRays.SceneObjects
     public interface IObject3D
     {
         IMaterial Material { get; }
-        float GetDistance(Vector position);
+        float GetDistance(Vector position, Vector direction);
     }
 }

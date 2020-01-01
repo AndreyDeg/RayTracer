@@ -25,5 +25,70 @@
               ),
               min(lowerLeft.z, upperRight.z));
         }
-    }
+
+		public static float BoxTest2(Vector p, Vector d, Vector lowerLeft, Vector upperRight)
+		{
+			if (d.x == 0 && d.y == 0 && d.z == 0)
+				return BoxTest(p, lowerLeft, upperRight);
+
+			if (p.In(lowerLeft, upperRight))
+				return BoxTest(p, lowerLeft, upperRight);
+
+			var minP = lowerLeft - p;
+			var maxP = upperRight - p;
+
+			if (minP.x > 0)
+			{
+				if (d.x > 0)//
+				{
+					var r = minP.x / d.x;
+					if ((d * r).In(minP, maxP)) return r;
+				}
+			}
+			else if (maxP.x < 0)
+			{
+				if (d.x < 0)
+				{
+					var r = maxP.x / d.x;
+					if ((d * r).In(minP, maxP)) return r;
+				}
+			}
+
+			if (minP.y > 0)
+			{
+				if (d.y > 0)
+				{
+					var r = minP.y / d.y;
+					if ((d * r).In(minP, maxP)) return r;
+				}
+			}
+			else if (maxP.y < 0)
+			{
+				if (d.y < 0)//
+				{
+					var r = maxP.y / d.y;
+					if ((d * r).In(minP, maxP)) return r;
+				}
+			}
+
+			if (minP.z > 0)
+			{
+				if (d.z > 0)
+				{
+					var r = minP.z / d.z;
+					if ((d * r).In(minP, maxP)) return r;
+				}
+			}
+			else if (maxP.z < 0)
+			{
+				if (d.z < 0)//
+				{
+					var r = maxP.z / d.z;
+					if ((d * r).In(minP, maxP)) return r;
+				}
+			}
+
+			return float.MaxValue;
+		}
+	}
 }

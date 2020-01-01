@@ -7,7 +7,7 @@ namespace WindowsFormsRays.SceneObjects
     public class Text3D : IObject3D
     {
         private Vector boxMin, boxMax;
-        private List<Letter3D> objects = new List<Letter3D>();
+        public List<Letter3D> objects = new List<Letter3D>();
 
         public IMaterial Material { get; set; }
 
@@ -27,22 +27,22 @@ namespace WindowsFormsRays.SceneObjects
             foreach (var letter in objects)
                 letter.posX -= size;
 
-            boxMin = new Vector(-size, 0, -1f);
-            boxMax = new Vector(size, 8, 1f);
+            boxMin = new Vector(-size, 0, -1f) - new Vector(0.6f, 0.6f, 0.6f);
+            boxMax = new Vector(size, 8, 1f) + new Vector(0.6f, 0.6f, 0.6f);
         }
 
-        public float GetDistance(Vector position)
+        public float GetDistance(Vector position, Vector direction)
         {
             var boxDist = Utils3D.BoxTest(position, boxMin, boxMax);
             if (boxDist > 1f)
-                return boxDist;
+                return boxDist; //Utils3D.BoxTest2(position, direction, boxMin, boxMax);
 
             Vector f = position; // Flattened position (z=0)
             f.z = 0;
 
             float distance = float.MaxValue;
             foreach (var obj in objects)
-                distance = Utils3D.min(distance, obj.GetDistance(f));
+                distance = Utils3D.min(distance, obj.GetDistance(f, direction));
 
             return (float)Math.Pow(Utils3D.Pow8(distance) + Utils3D.Pow8(position.z), 0.125f) - 0.5f;
         }
@@ -53,7 +53,7 @@ namespace WindowsFormsRays.SceneObjects
         public float size;
         public float posX;
 
-        private Vector boxMin, boxMax;
+        public Vector boxMin, boxMax;
         private List<IObject3D> objects = new List<IObject3D>();
 
         public Letter3D(char c, float posX)
@@ -108,26 +108,26 @@ namespace WindowsFormsRays.SceneObjects
                 objects.Add(new LetterLine3D { begin = new Vector(0, 8), end = new Vector(4, -8) });
             }
 
-            boxMin = new Vector(0, 0, -1f);
-            boxMax = new Vector(size, 8, 1f);
+            boxMin = new Vector(0, 0, -1f) - new Vector(0.7f, 0.7f, 0.7f);
+            boxMax = new Vector(size, 8, 1f) + new Vector(0.6f, 0.6f, 0.6f);
         }
 
         public IMaterial Material { get; set; }
 
-        public float GetDistance(Vector position)
+        public float GetDistance(Vector position, Vector direction)
         {
             position.x -= this.posX;
 
             var boxDist = Utils3D.BoxTest(position, boxMin, boxMax);
             if (boxDist > 1f)
-                return boxDist;
+                return boxDist; // Utils3D.BoxTest2(position, direction, boxMin, boxMax);
 
             Vector f = position; // Flattened position (z=0)
             f.z = 0;
 
             float distance = float.MaxValue;
             foreach (var obj in objects)
-                distance = Utils3D.min(distance, obj.GetDistance(f));
+                distance = Utils3D.min(distance, obj.GetDistance(f, direction));
 
             return distance;
         }
@@ -138,7 +138,7 @@ namespace WindowsFormsRays.SceneObjects
         public Vector begin, end;
         public IMaterial Material { get; set; }
 
-        public float GetDistance(Vector position)
+        public float GetDistance(Vector position, Vector direction)
         {
             Vector o = position - (begin + end * Utils3D.min(-Utils3D.min((begin - position) % end / (end % end), 0), 1));
             return (float)Math.Sqrt(o % o);
@@ -151,7 +151,7 @@ namespace WindowsFormsRays.SceneObjects
         public Vector center;
         public IMaterial Material { get; set; }
 
-        public float GetDistance(Vector position)
+        public float GetDistance(Vector position, Vector direction)
         {
             Vector o = position - center;
 

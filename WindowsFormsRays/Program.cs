@@ -36,10 +36,10 @@ namespace WindowsFormsRays
                 {
                     var rayMarchings = new List<IRayMarching>()
                     {
-                        //new RayMarchingScene(scene, 0.02f),
+                        new RayMarchingScene(scene, 0.02f),
                         //new RayMarchingScene(scene, 0.04f),
                         //new RayMarchingScene(scene, 0.08f),
-                        new RayMarchingCache(scene, cacheData, 0.02f),
+                        //new RayMarchingCache(scene, cacheData, 0.02f),
                         new RayMarchingCache(scene, cacheData, 0.04f),
                         new RayMarchingCache(scene, cacheData, 0.08f),
                     };

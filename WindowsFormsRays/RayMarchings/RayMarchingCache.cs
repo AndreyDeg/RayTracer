@@ -66,6 +66,11 @@ namespace WindowsFormsRays.RayMarchings
                 if (d < accuracy//тут было 0.01
                             || ++noHitCount > 99 || d < 0)
                 {
+                    /*if (accuracy < 0.03f && sceneData.QueryDatabase(hitPos, out _) < 0)
+                        return new ColorMaterial() { Color = new Vector(500, 0, 0) };
+                    if (accuracy < 0.03f && sceneData.QueryDatabase(hitPos, out _) > accuracy)
+                        return new ColorMaterial() { Color = new Vector(0, 0, 500) };
+                       */ 
                     var hitType = chacheData.FastFastQueryDatabaseHitType(hitPos);
 
                     if (noHitCount < 99)
@@ -73,7 +78,7 @@ namespace WindowsFormsRays.RayMarchings
                         if (hitType is MirrorMaterial)
                         {
                             //Считаем по-честному, чтоб точность побольше была
-                            d = sceneData.QueryDatabase(hitPos, out _);
+                            d = sceneData.QueryDatabase(hitPos, direction, out _);
                             hitNorm = sceneData.QueryDatabaseNorm(hitPos, d);
                         }
                         else
